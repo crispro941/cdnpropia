@@ -1,0 +1,49 @@
+{
+  "categories": [
+    "Noticias",
+    "Películas",
+    "Series",
+    "Deportes",
+    "Música",
+    "Documentales",
+    "Infantil"
+  ],
+  "channels": [
+    {
+      "id": "channel1",
+      "name": "Noticias 24/7",
+      "category": "Noticias",
+      "logo": "https://via.placeholder.com/150/FF0000/FFFFFF?text=NEWS",
+      "url": "https://tu-url-de-streaming-noticias.m3u8"
+    },
+    {
+      "id": "channel2",
+      "name": "Cine Max",
+      "category": "Películas",
+      "logo": "https://via.placeholder.com/150/0000FF/FFFFFF?text=FILM",
+      "url": "https://tu-url-de-streaming-peliculas.m3u8"
+    },
+    {
+      "id": "channel3",
+      "name": "Series Hoy",
+      "category": "Series",
+      "logo": "https://via.placeholder.com/150/00FF00/FFFFFF?text=SERIES",
+      "url": "https://tu-url-de-streaming-series.m3u8"
+    },
+    {
+      "id": "channel4",
+      "name": "Deportes Total",
+      "category": "Deportes",
+      "logo": "https://via.placeholder.com/150/FFFF00/000000?text=SPORT",
+      "url": "https://tu-url-de-streaming-deportes.m3u8"
+    }
+    ,
+    {
+      "id": "channel5",
+      "name": "Música Latina",
+      "category": "Música",
+      "logo": "https://via.placeholder.com/150/FF00FF/FFFFFF?text=MUSIC",
+      "url": "https://tu-url-de-streaming-musica.m3u8"
+    }
+  ]
+}

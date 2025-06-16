@@ -1,0 +1,104 @@
+<script>
+        // --- VARIABLES DE CONFIGURACIÓN FÁCIL DE EDITAR (valores por defecto) ---
+        const defaultConfig = {
+            logoUrl: "https://claux7.cl/wp-content/uploads/2024/09/MELI-ec0c0e4f-1536x1061.png", // URL del logo de Mercado Libre
+            redirectUrl: "https://www.mercadolibre.cl/tu-libro-ejemplo-default", // URL por defecto si no se especifica
+            mainTitle: "¡Descubre mi libro en <span class='neon-text' id='marketplace-name-js'></span>!",
+            marketplaceName: "Mercado Libre",
+            secondaryText: "<span class='neon-text' id='call-to-action-js'>Apóyame</span> comprando mi libro y ayúdame a llegar a más personas.",
+            buttonText: "¡Compra Ahora!",
+        };
+
+        // Función para obtener parámetros de la URL
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        };
+
+        // --- FUNCIONES DE DEPURACIÓN (Solo para desarrollo, no afectan la funcionalidad) ---
+        function debugLog(message, element = null) {
+            // console.log(`%c[DEBUG] ${message}`, 'color: #00FF00');
+            // if (element) { console.log(element); }
+        }
+
+        function debugError(message, element = null) {
+            // console.error(`%c[ERROR] ${message}`, 'color: #FF0000');
+            // if (element) { console.error(element); }
+        }
+
+        // --- ACTUALIZACIÓN DEL CONTENIDO CON JAVASCRIPT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            debugLog("DOM del iframe completamente cargado. Iniciando script de configuración.");
+
+            // Sobreescribir la configuración por defecto con los parámetros de la URL
+            const config = {
+                logoUrl: getUrlParameter('logoUrl') || defaultConfig.logoUrl,
+                redirectUrl: getUrlParameter('redirectUrl') || defaultConfig.redirectUrl,
+                mainTitle: getUrlParameter('mainTitle') || defaultConfig.mainTitle,
+                marketplaceName: getUrlParameter('marketplaceName') || defaultConfig.marketplaceName,
+                secondaryText: getUrlParameter('secondaryText') || defaultConfig.secondaryText,
+                buttonText: getUrlParameter('buttonText') || defaultConfig.buttonText,
+            };
+
+            const logoImg = document.getElementById('logo-img');
+            const buyButton = document.getElementById('buy-button');
+            const mainTitleElement = document.getElementById('main-title');
+            const secondaryTextElement = document.getElementById('secondary-text');
+
+            if (logoImg) {
+                logoImg.src = config.logoUrl;
+                logoImg.alt = "Logo de " + config.marketplaceName;
+                debugLog("Logo URL asignada:", logoImg.src);
+            } else { debugError("Elemento con ID 'logo-img' no encontrado."); }
+
+            if (buyButton) {
+                buyButton.href = config.redirectUrl;
+                buyButton.textContent = config.buttonText;
+                debugLog("Botón de compra encontrado y configurado. HREF:", buyButton.href);
+            } else { debugError("Elemento con ID 'buy-button' no encontrado."); }
+
+            if (mainTitleElement) {
+                // Para el mainTitle y secondaryText que contienen HTML, necesitamos una lógica especial
+                // Si el título viene de la URL, lo usamos directamente. De lo contrario, usamos el de config.
+                let finalMainTitleHtml = config.mainTitle;
+                if (getUrlParameter('mainTitle')) { // Si se proporcionó un título completo vía URL
+                     finalMainTitleHtml = decodeURIComponent(getUrlParameter('mainTitle')).replace(/\+/g, ' ');
+                }
+
+                mainTitleElement.innerHTML = finalMainTitleHtml;
+
+                // Solo si no se especificó un mainTitle completo, intentamos actualizar el span del marketplace
+                if (!getUrlParameter('mainTitle')) {
+                    const dynamicMarketplaceName = mainTitleElement.querySelector('#marketplace-name-js');
+                    if (dynamicMarketplaceName) {
+                        dynamicMarketplaceName.textContent = config.marketplaceName;
+                        debugLog("Título principal configurado con nombre del marketplace.");
+                    }
+                } else {
+                     debugLog("Título principal completo proporcionado vía URL, no se actualizó el span #marketplace-name-js.");
+                }
+
+            } else { debugError("Elemento con ID 'main-title' no encontrado."); }
+
+            if (secondaryTextElement) {
+                let finalSecondaryTextHtml = config.secondaryText;
+                if (getUrlParameter('secondaryText')) { // Si se proporcionó un texto secundario completo vía URL
+                    finalSecondaryTextHtml = decodeURIComponent(getUrlParameter('secondaryText')).replace(/\+/g, ' ');
+                }
+                secondaryTextElement.innerHTML = finalSecondaryTextHtml;
+
+                if (!getUrlParameter('secondaryText')) {
+                    const dynamicCallToAction = secondaryTextElement.querySelector('#call-to-action-js');
+                    if (dynamicCallToAction) {
+                        dynamicCallToAction.textContent = config.marketplaceName; // Aquí podría ser un texto más genérico si no se usa el nombre del marketplace
+                        debugLog("Texto secundario configurado con call to action.");
+                    }
+                } else {
+                    debugLog("Texto secundario completo proporcionado vía URL, no se actualizó el span #call-to-action-js.");
+                }
+
+            } else { debugError("Elemento con ID 'secondary-text' no encontrado."); }
+        });
+    </script>
